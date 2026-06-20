@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TG 游戏测试</title>
-    <!-- 核心：引入 Telegram Web App 官方 SDK -->
+    <title>TG 游戏大厅</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         /* 使用 TG 原生主题色变量，让网页颜色随用户的 TG 主题（深色/浅色）自动切换 */
@@ -19,51 +18,64 @@
         h1 { font-size: 24px; }
         .card {
             background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             margin: 20px 0;
+            font-size: 14px;
+            text-align: left;
         }
-        button {
+        .menu-btn {
             background-color: var(--tg-theme-button-color, #2481cc);
             color: var(--tg-theme-button-text-color, #ffffff);
             border: none;
-            padding: 12px 24px;
+            padding: 14px 24px;
             border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .test-btn {
+            background-color: #666;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-   <h1>🌌 小六王的游戏宇宙</h1>
-<div class="menu">
-    <button onclick="window.location.href='/game1/'">🚀 游戏一：疯狂跳跃</button>
-    <button onclick="window.location.href='/game2/'">🎲 游戏二：逻辑拼图</button>
-</div>
+    <h1>🌌 小六王的游戏宇宙</h1>
+    
+    <div class="card" id="user-info">
+        正在获取 Telegram 玩家信息...
+    </div>
 
+    <div class="menu">
+        <button class="menu-btn" onclick="window.location.href='/game1/'">🚀 游戏一：疯狂跳跃</button>
+        <button class="menu-btn" onclick="window.location.href='/game2/'">🎲 游戏二：逻辑拼图</button>
+    </div>
 
-    <button onclick="triggerHapticAndAlert()">点击测试交互弹窗</button>
+    <button class="test-btn" onclick="triggerHapticAndAlert()">点击测试接口连通性</button>
 
     <script>
         // 1. 初始化 TG Web App 对象
         const tg = window.Telegram.WebApp;
-        
-        // 告诉 TG 页面已加载完毕
         tg.ready(); 
-        // 默认将小游戏展开为全屏
         tg.expand(); 
 
         // 2. 获取并显示玩家信息
         const userInfoDiv = document.getElementById('user-info');
-        // initDataUnsafe 包含了用户的基础信息（仅供前端展示，不要用于后端验证）
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
             userInfoDiv.innerHTML = `
-                你好，<b>${user.first_name} ${user.last_name || ''}</b>！<br><br>
-                你的 TG ID 是: <code>${user.id}</code><br>
-                你的语言设置: ${user.language_code}
+                🛸 <b>欢迎回来，${user.first_name} ${user.last_name || ''}</b><br>
+                你的 TG ID: <code>${user.id}</code>
             `;
         } else {
             userInfoDiv.innerHTML = "⚠️ 请在 Telegram 内部打开此链接，否则无法获取玩家信息。";
@@ -71,10 +83,8 @@
 
         // 3. 测试按钮交互逻辑
         function triggerHapticAndAlert() {
-            // 调用手机震动反馈（如果设备支持）
             tg.HapticFeedback.impactOccurred('heavy');
-            // 调用 TG 原生的弹窗样式
-            tg.showAlert('测试成功！域名和 SDK 都已完美连通。');
+            tg.showAlert('测试成功！大厅和 TG SDK 完美连通。');
         }
     </script>
 </body>
